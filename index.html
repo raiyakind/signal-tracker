@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal — Congressional Trade Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #0f1219;
+    --surface:     #161b26;
+    --surface2:    #1c2232;
+    --surface3:    #222a3e;
+    --border:      #272f45;
+    --border-mid:  #333d58;
+    --border-hi:   #445070;
+    --text:        #e8ecf8;
+    --text-mid:    #8e9ec0;
+    --text-dim:    #556080;
+    --text-faint:  #2c3550;
+    --ink:         #f0f4ff;
+    --gold:        #f0b840;
+    --gold-soft:   #d4a040;
+    --gold-dim:    rgba(240,184,64,0.13);
+    --sage:        #42c882;
+    --sage-bright: #62e49e;
+    --sage-dim:    rgba(66,200,130,0.13);
+    --rose:        #e05878;
+    --rose-bright: #f07898;
+    --rose-dim:    rgba(224,88,120,0.13);
+    --amber:       #e08828;
+    --amber-dim:   rgba(224,136,40,0.13);
+    --slate:       #58a4e4;
+    --slate-dim:   rgba(88,164,228,0.13);
+    --violet:      #a070f0;
+    --violet-dim:  rgba(160,112,240,0.13);
+    --pink:        #f472b6;
+    --pink-soft:   #e879a0;
+    --pink-dim:    rgba(244,114,182,0.13);
+    --pink-glow:   rgba(244,114,182,0.07);
+    --font-serif:  'Playfair Display', Georgia, serif;
+    --font-mono:   'IBM Plex Mono', monospace;
+    --font-sans:   'Plus Jakarta Sans', sans-serif;
+    --r-sm:        10px;
+    --r-md:        14px;
+    --r-lg:        18px;
+    --r-xl:        22px;
+    --r-pill:      100px;
+    --shadow-sm:   0 1px 4px rgba(0,0,0,0.25), 0 2px 12px rgba(0,0,0,0.15);
+    --shadow-md:   0 4px 20px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2);
+    --shadow-lg:   0 12px 48px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.55;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(160,112,240,0.055) 0%, transparent 48%),
+      radial-gradient(ellipse at 85% 88%, rgba(66,200,130,0.045) 0%, transparent 48%),
+      radial-gradient(ellipse at 55% 25%, rgba(88,164,228,0.035) 0%, transparent 42%);
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    position: relative; z-index: 10;
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-mid);
+  }
+
+  .logo-wrap { display: flex; align-items: center; gap: 14px; }
+
+  .logo {
+    font-family: var(--font-serif);
+    font-size: 27px; font-weight: 400; font-style: italic;
+    color: var(--pink); letter-spacing: 0.04em;
+  }
+
+  .logo-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--pink); opacity: 0.8;
+    position: relative; top: 1px;
+  }
+
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 9.5px; font-weight: 300;
+    letter-spacing: 0.2em; color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 20px; }
+
+  .live-badge {
+    display: flex; align-items: center; gap: 7px;
+    color: var(--sage-bright);
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.1em;
+    background: var(--sage-dim);
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    border: 1px solid rgba(66,200,130,0.2);
+  }
+
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--sage-bright);
+    box-shadow: 0 0 8px var(--sage);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:0.4; transform:scale(0.8); }
+  }
+
+  .header-time {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.07em;
+    background: var(--surface2);
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--border);
+  }
+
+  /* ---- LAYOUT ---- */
+  .layout {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 262px 1fr 278px;
+    height: calc(100vh - 60px);
+  }
+
+  /* ---- SIDEBARS ---- */
+  .sidebar-left, .sidebar-right {
+    overflow-y: auto;
+    background: var(--surface);
+  }
+
+  .sidebar-left  { border-right: 1px solid var(--border-mid); }
+  .sidebar-right { border-left:  1px solid var(--border-mid); }
+
+  .sidebar-left::-webkit-scrollbar,
+  .sidebar-right::-webkit-scrollbar { width: 3px; }
+  .sidebar-left::-webkit-scrollbar-thumb,
+  .sidebar-right::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+  .sidebar-section {
+    padding: 20px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.22em;
+    color: var(--pink-soft); text-transform: uppercase;
+    margin-bottom: 14px; opacity: 0.7;
+  }
+
+  /* ---- PILOT CARDS ---- */
+  .pilot-card {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 11px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+  }
+
+  .pilot-card:hover {
+    background: var(--surface2);
+    border-color: var(--border-mid);
+  }
+
+  .pilot-card.active {
+    background: var(--surface2);
+    border-color: var(--border-hi);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pilot-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif);
+    font-style: italic; font-size: 14px;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  .pilot-info { flex: 1; min-width: 0; }
+
+  .pilot-name {
+    font-family: var(--font-sans);
+    font-size: 13px; font-weight: 500;
+    color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .pilot-meta {
+    font-family: var(--font-mono);
+    font-size: 9.5px; color: var(--text-dim);
+    margin-top: 2px; letter-spacing: 0.04em;
+  }
+
+  .pilot-why {
+    font-family: var(--font-mono);
+    font-size: 9px; color: var(--text-dim);
+    line-height: 1.6; margin-top: 5px;
+  }
+
+  .pilot-return {
+    font-family: var(--font-mono);
+    font-size: 11.5px; font-weight: 500;
+    white-space: nowrap; padding-top: 2px;
+  }
+
+  .pos { color: var(--sage-bright); }
+  .neg { color: var(--rose-bright); }
+
+  /* ---- MAIN FEED ---- */
+  .main-feed {
+    display: flex; flex-direction: column;
+    overflow: hidden; background: var(--bg);
+  }
+
+  .feed-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface);
+  }
+
+  .feed-title {
+    font-family: var(--font-serif);
+    font-size: 20px; font-weight: 400; font-style: italic;
+    color: var(--pink);
+  }
+
+  .feed-filters { display: flex; gap: 7px; }
+
+  .filter-btn {
+    padding: 5px 14px;
+    border: 1px solid var(--border-mid);
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--text-dim); font-family: var(--font-mono);
+    font-size: 9.5px; cursor: pointer;
+    letter-spacing: 0.1em; transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active {
+    border-color: var(--gold); color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  .trade-feed {
+    flex: 1; overflow-y: auto;
+    padding: 18px 22px;
+  }
+
+  .trade-feed::-webkit-scrollbar { width: 3px; }
+  .trade-feed::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+  /* ---- TRADE CARD ---- */
+  .trade-card {
+    border: 1px solid var(--border-mid);
+    border-radius: var(--r-lg);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    background: var(--surface);
+    transition: all 0.2s ease;
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.35s ease both;
+    box-shadow: var(--shadow-sm);
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .trade-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: var(--r-lg) 0 0 var(--r-lg);
+  }
+
+  .trade-card.buy::before  { background: var(--sage); }
+  .trade-card.sell::before { background: var(--rose); }
+  .trade-card.call::before { background: var(--gold); }
+
+  .trade-card:hover {
+    border-color: var(--border-hi);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  /* Date row */
+  .trade-dates {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 10px; flex-wrap: wrap;
+  }
+
+  .date-chip {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 9.5px; letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: var(--r-pill);
+  }
+
+  .date-chip.transaction {
+    background: var(--surface3);
+    color: var(--text-mid);
+    border: 1px solid var(--border-mid);
+  }
+
+  .date-chip.filed {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+
+  .date-chip.lag {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .lag-ok    { background: var(--sage-dim);   color: var(--sage-bright); border: 1px solid rgba(66,200,130,0.2); }
+  .lag-mid   { background: var(--gold-dim);   color: var(--gold);         border: 1px solid rgba(240,184,64,0.2); }
+  .lag-stale { background: var(--rose-dim);   color: var(--rose-bright); border: 1px solid rgba(224,88,120,0.2); }
+
+  .date-sep {
+    color: var(--text-faint);
+    font-size: 10px;
+  }
+
+  .trade-politician { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+
+  .trade-avatar-sm {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 10px; flex-shrink: 0;
+  }
+
+  .trade-politician-name {
+    font-family: var(--font-sans);
+    font-size: 12px; font-weight: 500; color: var(--text-mid);
+  }
+
+  .trade-main {
+    display: flex; align-items: baseline;
+    gap: 11px; margin-bottom: 10px; flex-wrap: wrap;
+  }
+
+  .trade-ticker {
+    font-family: var(--font-serif);
+    font-size: 26px; font-weight: 500; font-style: italic;
+    color: var(--ink); letter-spacing: 0.04em;
+  }
+
+  .trade-type-badge {
+    padding: 3px 10px; border-radius: var(--r-pill);
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  .buy  .trade-type-badge { background: var(--sage-dim);  color: var(--sage-bright); }
+  .sell .trade-type-badge { background: var(--rose-dim);  color: var(--rose-bright); }
+  .call .trade-type-badge { background: var(--gold-dim);  color: var(--gold); }
+
+  .trade-company { font-size: 13px; color: var(--text-mid); font-weight: 300; }
+
+  .trade-bottom {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-top: 10px;
+  }
+
+  .trade-amount {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--text-dim);
+  }
+
+  .trade-amount strong { color: var(--text-mid); font-weight: 500; }
+
+  .copy-btn {
+    padding: 6px 16px; border-radius: var(--r-pill);
+    border: 1px solid var(--gold); background: transparent;
+    color: var(--gold); font-family: var(--font-mono);
+    font-size: 9.5px; cursor: pointer;
+    letter-spacing: 0.1em; transition: all 0.15s;
+    display: flex; align-items: center; gap: 5px;
+    text-transform: uppercase;
+  }
+
+  .copy-btn:hover { background: var(--gold); color: var(--bg); }
+  .copy-btn.executed { border-color: var(--sage); background: var(--sage-dim); color: var(--sage-bright); }
+  .copy-btn svg { width: 9px; height: 9px; }
+
+  .new-badge {
+    position: absolute; top: 12px; right: 14px;
+    background: var(--pink); color: var(--bg);
+    font-family: var(--font-mono); font-size: 7.5px;
+    padding: 2px 8px; border-radius: var(--r-pill);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  .values-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-mono); font-size: 9.5px;
+    color: var(--sage-bright); background: var(--sage-dim);
+    padding: 3px 9px; border-radius: var(--r-pill);
+    letter-spacing: 0.07em; margin-top: 8px;
+    border: 1px solid rgba(66,200,130,0.15);
+  }
+
+  .infra-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-mono); font-size: 9.5px;
+    color: var(--slate); background: var(--slate-dim);
+    padding: 3px 9px; border-radius: var(--r-pill);
+    letter-spacing: 0.07em; margin-top: 8px; margin-left: 6px;
+    border: 1px solid rgba(88,164,228,0.15);
+  }
+
+  /* ---- RIGHT SIDEBAR ---- */
+  .stat-block { padding: 18px 18px; border-bottom: 1px solid var(--border); }
+
+  .stat-value {
+    font-family: var(--font-serif);
+    font-size: 32px; font-weight: 400; font-style: italic;
+    line-height: 1; color: var(--ink);
+  }
+
+  .stat-sub {
+    font-family: var(--font-mono);
+    font-size: 9.5px; color: var(--text-dim);
+    margin-top: 5px; letter-spacing: 0.04em;
+  }
+
+  .settings-row {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 13px;
+  }
+
+  .settings-row:last-child { margin-bottom: 0; }
+
+  .settings-key {
+    font-family: var(--font-mono);
+    font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em;
+  }
+
+  .settings-val {
+    font-family: var(--font-sans);
+    font-size: 12px; color: var(--text); font-weight: 500;
+  }
+
+  .toggle { position: relative; width: 32px; height: 17px; cursor: pointer; }
+  .toggle input { display: none; }
+
+  .toggle-track {
+    width: 100%; height: 100%;
+    border-radius: var(--r-pill);
+    background: var(--border-mid); transition: background 0.2s; position: relative;
+  }
+
+  .toggle input:checked + .toggle-track { background: var(--sage); }
+
+  .toggle-thumb {
+    position: absolute; top: 2px; left: 2px;
+    width: 13px; height: 13px; border-radius: 50%;
+    background: var(--text); transition: transform 0.2s; pointer-events: none;
+  }
+
+  .toggle input:checked + .toggle-track .toggle-thumb { transform: translateX(15px); }
+
+  .mini-chart {
+    display: flex; align-items: flex-end;
+    gap: 3px; height: 30px; margin-top: 12px;
+  }
+
+  .mini-bar { flex:1; border-radius: 3px 3px 0 0; min-height: 2px; }
+
+  .exec-log { padding: 16px 18px; border-bottom: 1px solid var(--border); }
+
+  .exec-entry {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 7px 0; border-bottom: 1px solid var(--border);
+  }
+
+  .exec-entry:last-child { border-bottom: none; }
+
+  .exec-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    margin-top: 3px; flex-shrink: 0;
+  }
+
+  .exec-text {
+    font-family: var(--font-mono);
+    font-size: 10.5px; color: var(--text-mid); line-height: 1.5;
+  }
+
+  .exec-text strong { color: var(--text); }
+  .exec-time { font-family: var(--font-mono); font-size: 9.5px; color: var(--text-faint); margin-left: auto; white-space: nowrap; }
+
+  /* ---- MODAL ---- */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(8,10,15,0.75);
+    backdrop-filter: blur(10px);
+    z-index: 100; align-items: center; justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    border: 1px solid var(--border-hi);
+    border-radius: var(--r-xl);
+    background: var(--surface2);
+    padding: 32px; width: 480px; max-width: 92vw;
+    position: relative;
+    animation: modalIn 0.28s ease both;
+    box-shadow: var(--shadow-lg);
+  }
+
+  @keyframes modalIn {
+    from { opacity:0; transform:scale(0.96) translateY(10px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+  }
+
+  .modal-title {
+    font-family: var(--font-serif);
+    font-size: 24px; font-weight: 400; font-style: italic;
+    color: var(--pink); margin-bottom: 5px;
+  }
+
+  .modal-sub {
+    font-family: var(--font-mono);
+    font-size: 10.5px; color: var(--text-dim);
+    margin-bottom: 22px; line-height: 1.6; letter-spacing: 0.04em;
+  }
+
+  .modal-trade-summary {
+    background: var(--surface3);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--r-lg); padding: 18px; margin-bottom: 22px;
+  }
+
+  .modal-ticker {
+    font-family: var(--font-serif);
+    font-size: 34px; font-weight: 400; font-style: italic;
+    color: var(--ink); margin-bottom: 4px;
+  }
+
+  .modal-detail {
+    font-family: var(--font-mono);
+    font-size: 10.5px; color: var(--text-dim);
+    margin-bottom: 2px; letter-spacing: 0.04em;
+  }
+
+  .modal-lag-notice {
+    margin-top: 10px; padding: 8px 12px;
+    border-radius: var(--r-sm);
+    font-family: var(--font-mono); font-size: 9.5px;
+    letter-spacing: 0.04em; line-height: 1.5;
+  }
+
+  .modal-amount-row {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .modal-input-label {
+    font-family: var(--font-mono);
+    font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.15em; margin-bottom: 9px; text-transform: uppercase;
+  }
+
+  .amount-selector { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+
+  .amount-chip {
+    padding: 6px 14px; border: 1px solid var(--border-mid);
+    border-radius: var(--r-pill); background: transparent;
+    color: var(--text-mid); font-family: var(--font-mono);
+    font-size: 11.5px; cursor: pointer; transition: all 0.15s;
+  }
+
+  .amount-chip:hover, .amount-chip.selected {
+    border-color: var(--gold); color: var(--gold); background: var(--gold-dim);
+  }
+
+  .modal-actions { display: flex; gap: 10px; }
+
+  .btn-cancel {
+    flex: 1; padding: 12px;
+    border: 1px solid var(--border-mid); border-radius: var(--r-md);
+    background: transparent; color: var(--text-dim);
+    font-family: var(--font-mono); font-size: 11px;
+    cursor: pointer; transition: all 0.15s; letter-spacing: 0.06em;
+  }
+
+  .btn-cancel:hover { border-color: var(--text-mid); color: var(--text); }
+
+  .btn-execute {
+    flex: 2; padding: 12px; border: none;
+    border-radius: var(--r-md); background: var(--gold); color: var(--bg);
+    font-family: var(--font-serif);
+    font-size: 18px; font-style: italic; font-weight: 400;
+    cursor: pointer; letter-spacing: 0.04em; transition: all 0.15s;
+  }
+
+  .btn-execute:hover {
+    background: var(--gold-soft);
+    box-shadow: 0 4px 24px rgba(240,184,64,0.25);
+  }
+
+  .modal-close {
+    position: absolute; top: 16px; right: 18px;
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 50%; width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); cursor: pointer;
+    font-size: 14px; transition: all 0.15s;
+  }
+
+  .modal-close:hover { background: var(--border-mid); color: var(--text); }
+
+  /* ---- SUCCESS ---- */
+  .success-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(66,200,130,0.05);
+    z-index: 200; align-items: center; justify-content: center; pointer-events: none;
+  }
+
+  .success-overlay.show { display: flex; animation: flashIn 0.7s ease both; }
+
+  @keyframes flashIn {
+    0%  { opacity:0; } 20% { opacity:1; }
+    80% { opacity:1; } 100%{ opacity:0; }
+  }
+
+  .success-msg {
+    font-family: var(--font-serif);
+    font-size: 38px; font-weight: 400; font-style: italic;
+    color: var(--sage-bright); text-align: center; letter-spacing: 0.06em;
+    text-shadow: 0 0 40px rgba(66,200,130,0.4);
+    background: var(--surface2);
+    padding: 30px 48px;
+    border-radius: var(--r-xl);
+    border: 1px solid rgba(66,200,130,0.2);
+  }
+
+  /* ---- TOAST ---- */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface2); border: 1px solid var(--border-hi);
+    border-radius: var(--r-lg); padding: 14px 18px;
+    z-index: 300; display: flex; gap: 12px; align-items: flex-start;
+    min-width: 290px; transform: translateY(120px); opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { color: var(--pink); font-size: 15px; margin-top: 2px; }
+  .toast-title { font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .toast-body  { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-dim); letter-spacing: 0.04em; }
+
+  /* Inputs */
+  .field-input {
+    width: 100%; padding: 9px 14px;
+    background: var(--surface3); border: 1px solid var(--border-mid);
+    border-radius: var(--r-sm); color: var(--text);
+    font-family: var(--font-mono); font-size: 12px;
+    outline: none; transition: border-color 0.15s;
+  }
+
+  .field-input:focus { border-color: var(--gold); }
+  .field-input::placeholder { color: var(--text-faint); }
+
+  /* Empty state */
+  .empty-state {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 180px; color: var(--text-dim);
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.1em; text-align: center; gap: 8px;
+  }
+
+  .empty-icon {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 22px; opacity: 0.5; color: var(--text-mid);
+  }
+
+  /* 45-day lag explainer banner */
+  .lag-banner {
+    margin: 14px 22px 0;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--r-md);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+
+  .lag-banner-icon { color: var(--pink); font-size: 13px; margin-top: 1px; flex-shrink: 0; }
+
+  .lag-banner-text {
+    font-family: var(--font-mono);
+    font-size: 9.5px; color: var(--text-dim);
+    line-height: 1.6; letter-spacing: 0.03em;
+  }
+
+  .lag-banner-text strong { color: var(--text-mid); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <span class="logo">Signal</span>
+    <div class="logo-dot"></div>
+    <span class="logo-sub">Congressional Intelligence</span>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>Monitoring</div>
+    <div class="header-time" id="clock">--:-- EST</div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar-left">
+    <div class="sidebar-section">
+      <div class="section-label">Your Pilots</div>
+
+      <div class="pilot-card active" onclick="filterByPilot('all',this)">
+        <div class="pilot-avatar" style="background:var(--gold-dim);color:var(--gold);">all</div>
+        <div class="pilot-info">
+          <div class="pilot-name">All Pilots</div>
+          <div class="pilot-meta">4 tracked</div>
+        </div>
+      </div>
+
+      <div class="pilot-card" onclick="filterByPilot('sewell',this)">
+        <div class="pilot-avatar" style="background:var(--sage-dim);color:var(--sage-bright);">Ts</div>
+        <div class="pilot-info">
+          <div class="pilot-name">Terri Sewell</div>
+          <div class="pilot-meta">D-AL &bull; +67.9% in 2025</div>
+          <div class="pilot-why">Healthcare equity and clean utilities. Strong multi-year returns, values-forward portfolio.</div>
+        </div>
+        <div class="pilot-return pos">+68%</div>
+      </div>
+
+      <div class="pilot-card" onclick="filterByPilot('khanna',this)">
+        <div class="pilot-avatar" style="background:var(--violet-dim);color:var(--violet);">Rk</div>
+        <div class="pilot-info">
+          <div class="pilot-name">Ro Khanna</div>
+          <div class="pilot-meta">D-CA &bull; +42% in 2025</div>
+          <div class="pilot-why">AI democratist. Most active trader in Congress. Fights for tech that serves people over profit.</div>
+        </div>
+        <div class="pilot-return pos">+42%</div>
+      </div>
+
+      <div class="pilot-card" onclick="filterByPilot('murkowski',this)">
+        <div class="pilot-avatar" style="background:var(--slate-dim);color:var(--slate);">Lm</div>
+        <div class="pilot-info">
+          <div class="pilot-name">Lisa Murkowski</div>
+          <div class="pilot-meta">R-AK &bull; Senate Energy Chair</div>
+          <div class="pilot-why">Nuclear, clean grid, AI power infrastructure. Chairs the committee that shapes energy policy.</div>
+        </div>
+        <div class="pilot-return pos">+35%</div>
+      </div>
+
+      <div class="pilot-card" onclick="filterByPilot('mcclain',this)">
+        <div class="pilot-avatar" style="background:var(--amber-dim);color:var(--amber);">Lc</div>
+        <div class="pilot-info">
+          <div class="pilot-name">Lisa McClain</div>
+          <div class="pilot-meta">R-MI &bull; House Conference Chair</div>
+          <div class="pilot-why">Leadership premium + AI infrastructure early mover. Vertiv +191%, Micron +280% after her entries.</div>
+        </div>
+        <div class="pilot-return pos">+37%</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Data Sources</div>
+      <div style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);line-height:2;letter-spacing:0.04em;">
+        <div>housestockwatcher.com</div>
+        <div>senatestockwatcher.com</div>
+        <div style="color:var(--text-faint);margin-top:4px;">STOCK Act disclosures</div>
+        <div style="color:var(--text-faint);">Up to 45-day filing lag</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Add Pilot</div>
+      <input class="field-input" placeholder="Search member..." style="font-size:11.5px;"/>
+    </div>
+  </div>
+
+  <!-- MAIN FEED -->
+  <div class="main-feed">
+    <div class="feed-header">
+      <div class="feed-title">Trade Disclosures</div>
+      <div class="feed-filters">
+        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('buy',this)">Buy</button>
+        <button class="filter-btn" onclick="setFilter('sell',this)">Sell</button>
+        <button class="filter-btn" onclick="setFilter('call',this)">Options</button>
+      </div>
+    </div>
+
+    <div class="lag-banner">
+      <div class="lag-banner-icon">&#x26A0;</div>
+      <div class="lag-banner-text">
+        <strong>45-day disclosure lag:</strong> Each card shows both the transaction date and the filing date. Green = filed within 10 days. Amber = 10–30 days. Red = 30+ days. Long-hold positions (healthcare, energy, infrastructure) are least affected by this delay.
+      </div>
+    </div>
+
+    <div class="trade-feed" id="tradeFeed"></div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="sidebar-right">
+
+    <div class="stat-block">
+      <div class="section-label">Configuration</div>
+      <div class="settings-row">
+        <span class="settings-key">Brokerage</span>
+        <span class="settings-val" style="color:var(--gold)">Schwab</span>
+      </div>
+      <div class="settings-row">
+        <span class="settings-key">Sizing</span>
+        <span class="settings-val">Proportional</span>
+      </div>
+      <div class="settings-row">
+        <span class="settings-key">Portfolio Base</span>
+        <span class="settings-val">$25,000</span>
+      </div>
+      <div class="settings-row">
+        <span class="settings-key">Auto-Execute</span>
+        <label class="toggle">
+          <input type="checkbox" id="autoExec" onchange="toggleAutoExec()">
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+      <div class="settings-row">
+        <span class="settings-key">Email Alerts</span>
+        <label class="toggle">
+          <input type="checkbox" checked>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="stat-block">
+      <div class="section-label">Trades Copied (30d)</div>
+      <div class="stat-value" id="tradeCount">0</div>
+      <div class="stat-sub">Across 4 pilots</div>
+      <div class="mini-chart" id="miniChart"></div>
+    </div>
+
+    <div class="stat-block">
+      <div class="section-label">Simulated Return</div>
+      <div class="stat-value pos" id="simReturn">+0.0%</div>
+      <div class="stat-sub">vs S&P 500 base: +16.6%</div>
+    </div>
+
+    <div class="exec-log" id="execLog">
+      <div class="section-label" style="margin-bottom:10px;">Execution Log</div>
+      <div class="empty-state">
+        <div class="empty-icon">nothing yet</div>
+        <div>No trades executed</div>
+      </div>
+    </div>
+
+    <div class="stat-block">
+      <div class="section-label">Next Sync</div>
+      <div class="stat-value" style="font-size:22px;color:var(--text-mid);" id="nextSync">15:00</div>
+      <div class="stat-sub">Polls every 15 minutes</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <div class="modal-title">Copy this trade</div>
+    <div class="modal-sub" id="modalSub">Proportional copy via Schwab. Review the lag before executing.</div>
+    <div class="modal-trade-summary">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="modal-ticker" id="modalTicker">--</div>
+        <span id="modalBadge" style="margin-top:10px;"></span>
+      </div>
+      <div id="modalCompany" style="font-family:var(--font-sans);font-size:14px;color:var(--text);margin-top:3px;font-weight:300;"></div>
+      <div class="modal-detail" id="modalPolitician" style="margin-top:6px;"></div>
+      <div class="modal-detail" id="modalOrigAmount"></div>
+      <div class="modal-detail" id="modalTransDate"></div>
+      <div class="modal-detail" id="modalFiledDate"></div>
+      <div id="modalLagNotice" class="modal-lag-notice"></div>
+      <div class="modal-amount-row">
+        <div class="modal-input-label">Your allocation</div>
+        <div class="amount-selector">
+          <button class="amount-chip selected" onclick="selectAmount(this,250)">$250</button>
+          <button class="amount-chip" onclick="selectAmount(this,500)">$500</button>
+          <button class="amount-chip" onclick="selectAmount(this,1000)">$1,000</button>
+          <button class="amount-chip" onclick="selectAmount(this,2500)">$2,500</button>
+        </div>
+        <input class="field-input" id="customAmount" placeholder="or enter custom amount..." oninput="clearChips()"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-execute" onclick="executeTrade()">Execute via Schwab</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-msg">Order placed<br><span style="font-size:20px;opacity:0.6;">sent to Schwab</span></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">&#x2736;</div>
+  <div>
+    <div class="toast-title" id="toastTitle"></div>
+    <div class="toast-body"  id="toastBody"></div>
+  </div>
+</div>
+
+<script>
+const pilots = {
+  sewell:    { name:'Terri Sewell',    initials:'Ts', bg:'var(--sage-dim)',   color:'var(--sage-bright)', party:'D' },
+  khanna:    { name:'Ro Khanna',       initials:'Rk', bg:'var(--violet-dim)', color:'var(--violet)',      party:'D' },
+  murkowski: { name:'Lisa Murkowski',  initials:'Lm', bg:'var(--slate-dim)',  color:'var(--slate)',        party:'R' },
+  mcclain:   { name:'Lisa McClain',    initials:'Lc', bg:'var(--amber-dim)',  color:'var(--amber)',        party:'R' }
+};
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
+// The app loads real trade data from trades.json (written by the GitHub Actions
+// poller every 15 minutes). If the file isn't found yet it falls back to sample
+// data so the UI always has something to show.
+
+const SAMPLE_TRADES = [
+  { id:1,  pilot:'sewell',    ticker:'UNH',  company:'UnitedHealth Group',   type:'buy',  amount:'$100K–$250K', transDate:'2026-02-18', filedDate:'2026-03-18', isNew:true,  values:'Healthcare equity', infra:false },
+  { id:2,  pilot:'mcclain',   ticker:'VRT',  company:'Vertiv Holdings',      type:'buy',  amount:'$50K–$100K',  transDate:'2026-03-02', filedDate:'2026-03-20', isNew:true,  values:null,               infra:true  },
+  { id:3,  pilot:'khanna',    ticker:'NVDA', company:'NVIDIA Corp',          type:'buy',  amount:'$500K–$1M',   transDate:'2026-02-10', filedDate:'2026-03-15', isNew:false, values:'AI infrastructure', infra:false },
+  { id:4,  pilot:'murkowski', ticker:'CEG',  company:'Constellation Energy', type:'buy',  amount:'$50K–$100K',  transDate:'2026-02-20', filedDate:'2026-03-18', isNew:false, values:'Clean nuclear',     infra:true  },
+  { id:5,  pilot:'sewell',    ticker:'DTE',  company:'DTE Energy',           type:'buy',  amount:'$50K–$100K',  transDate:'2026-01-30', filedDate:'2026-03-05', isNew:false, values:'Clean energy',      infra:false },
+  { id:6,  pilot:'mcclain',   ticker:'MU',   company:'Micron Technology',    type:'buy',  amount:'$50K–$100K',  transDate:'2026-01-22', filedDate:'2026-02-28', isNew:false, values:null,               infra:true  },
+  { id:7,  pilot:'khanna',    ticker:'ASML', company:'ASML Holding NV',      type:'sell', amount:'$250K–$500K', transDate:'2026-02-05', filedDate:'2026-03-10', isNew:false, values:null,               infra:false },
+  { id:8,  pilot:'murkowski', ticker:'NEE',  company:'NextEra Energy',       type:'buy',  amount:'$50K–$100K',  transDate:'2026-01-15', filedDate:'2026-02-20', isNew:false, values:'Grid infrastructure',infra:true  },
+  { id:9,  pilot:'sewell',    ticker:'ABBV', company:'AbbVie Inc',           type:'buy',  amount:'$50K–$100K',  transDate:'2026-01-10', filedDate:'2026-02-14', isNew:false, values:'Healthcare access',  infra:false },
+  { id:10, pilot:'mcclain',   ticker:'GEV',  company:'GE Vernova',           type:'buy',  amount:'$50K–$100K',  transDate:'2026-01-08', filedDate:'2026-02-10', isNew:false, values:null,               infra:true  },
+  { id:11, pilot:'khanna',    ticker:'MRVL', company:'Marvell Technology',   type:'buy',  amount:'$100K–$250K', transDate:'2026-01-20', filedDate:'2026-03-01', isNew:false, values:'Semi sovereignty',  infra:false },
+  { id:12, pilot:'murkowski', ticker:'BWX',  company:'BWX Technologies',     type:'buy',  amount:'$15K–$50K',   transDate:'2026-02-12', filedDate:'2026-03-12', isNew:false, values:'Advanced nuclear',  infra:true  },
+];
+
+// Pilots we track -- the poller uses these names to filter the API response
+const PILOT_NAMES = {
+  sewell:    'Terri Sewell',
+  khanna:    'Ro Khanna',
+  murkowski: 'Lisa Murkowski',
+  mcclain:   'Lisa McClain'
+};
+
+let trades = [];
+
+async function loadTrades() {
+  const feed = document.getElementById('tradeFeed');
+  feed.innerHTML = `<div class="empty-state"><div class="empty-icon">loading</div><div>Fetching disclosures...</div></div>`;
+
+  try {
+    // trades.json is written by the GitHub Actions poller (.github/workflows/poll.yml)
+    // It lives at the repo root and Netlify serves it as a static asset.
+    const res = await fetch('./trades.json?v=' + Date.now());
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+
+    if (Array.isArray(data.trades) && data.trades.length > 0) {
+      trades = data.trades;
+      const lastUpdated = data.lastUpdated ? new Date(data.lastUpdated) : null;
+      if (lastUpdated) {
+        showToast('Live data loaded', `Last synced ${lastUpdated.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`);
+      }
+    } else {
+      throw new Error('empty');
+    }
+  } catch (e) {
+    // trades.json doesn't exist yet (pre-poller) -- use sample data with a banner
+    trades = SAMPLE_TRADES;
+    showToast('Sample data', 'Connect GitHub Actions to load real disclosures');
+    // Show a note in the data source section
+    const note = document.createElement('div');
+    note.style.cssText = 'font-family:var(--font-mono);font-size:9px;color:var(--rose-bright);margin-top:8px;letter-spacing:0.04em;line-height:1.6;';
+    note.textContent = 'Showing sample data. Deploy the poller to load real trades.';
+    const src = document.querySelector('.sidebar-section:nth-child(2)');
+    if (src && !src.querySelector('.sample-note')) {
+      note.className = 'sample-note';
+      src.appendChild(note);
+    }
+  }
+
+  renderTrades();
+}
+// ── END DATA ───────────────────────────────────────────────────────────────────
+
+const today = new Date('2026-03-22');
+
+function getLagDays(transDate, filedDate) {
+  const t = new Date(transDate);
+  const f = new Date(filedDate);
+  return Math.round((f - t) / (1000 * 60 * 60 * 24));
+}
+
+function getStaleDays(filedDate) {
+  const f = new Date(filedDate);
+  return Math.round((today - f) / (1000 * 60 * 60 * 24));
+}
+
+function lagClass(days) {
+  if (days <= 10) return 'lag-ok';
+  if (days <= 30) return 'lag-mid';
+  return 'lag-stale';
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+let currentFilter='all', currentPilot='all', selectedAmount=250, currentTrade=null;
+let executedTrades=[], tradeCount=0, simReturn=0;
+
+function renderTrades() {
+  const feed = document.getElementById('tradeFeed');
+  const filtered = trades.filter(t =>
+    (currentFilter==='all' || t.type===currentFilter) &&
+    (currentPilot==='all'  || t.pilot===currentPilot)
+  );
+
+  if (!filtered.length) {
+    feed.innerHTML = `<div class="empty-state"><div class="empty-icon">nothing here</div><div>No trades match this filter</div></div>`;
+    return;
+  }
+
+  feed.innerHTML = filtered.map((t, i) => {
+    const p = pilots[t.pilot];
+    const done = executedTrades.includes(t.id);
+    const lagDays = getLagDays(t.transDate, t.filedDate);
+    const staleDays = getStaleDays(t.filedDate);
+    const lc = lagClass(lagDays);
+    const lagLabel = lagDays <= 10 ? `${lagDays}d lag` : lagDays <= 30 ? `${lagDays}d lag` : `${lagDays}d lag`;
+
+    const tags = [
+      t.values ? `<span class="values-tag">&#x2736; ${t.values}</span>` : '',
+      t.infra  ? `<span class="infra-tag">&#x25C6; AI infrastructure</span>` : ''
+    ].join('');
+
+    return `
+    <div class="trade-card ${t.type}" style="animation-delay:${i*0.04}s">
+      ${t.isNew ? '<div class="new-badge">New</div>' : ''}
+
+      <div class="trade-dates">
+        <div class="date-chip transaction">
+          <span style="opacity:0.6;font-size:8.5px;">TRADED</span>
+          ${formatDate(t.transDate)}
+        </div>
+        <span class="date-sep">&#x2192;</span>
+        <div class="date-chip filed">
+          <span style="opacity:0.6;font-size:8.5px;">FILED</span>
+          ${formatDate(t.filedDate)}
+        </div>
+        <div class="date-chip lag ${lc}">${lagLabel}</div>
+        ${staleDays > 0 ? `<div class="date-chip lag lag-mid" style="font-size:9px;">${staleDays}d ago</div>` : ''}
+      </div>
+
+      <div class="trade-politician">
+        <div class="trade-avatar-sm" style="background:${p.bg};color:${p.color}">${p.initials}</div>
+        <div class="trade-politician-name">${p.name}</div>
+      </div>
+
+      <div class="trade-main">
+        <div class="trade-ticker">${t.ticker}</div>
+        <div class="trade-type-badge">${t.type}</div>
+        <div class="trade-company">${t.company}</div>
+      </div>
+
+      ${tags ? `<div style="margin-bottom:2px;">${tags}</div>` : ''}
+
+      <div class="trade-bottom">
+        <div class="trade-amount">Filed: <strong>${t.amount}</strong></div>
+        <button class="copy-btn ${done?'executed':''}" onclick="openModal(${t.id})">
+          ${done
+            ? '<svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Copied'
+            : '<svg viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Copy trade'
+          }
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setFilter(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTrades();
+}
+
+function filterByPilot(pilot, card) {
+  currentPilot = pilot;
+  document.querySelectorAll('.pilot-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  renderTrades();
+}
+
+function openModal(id) {
+  currentTrade = trades.find(t => t.id === id);
+  if (!currentTrade) return;
+  const p = pilots[currentTrade.pilot];
+  const lagDays = getLagDays(currentTrade.transDate, currentTrade.filedDate);
+  const staleDays = getStaleDays(currentTrade.filedDate);
+
+  document.getElementById('modalTicker').textContent     = currentTrade.ticker;
+  document.getElementById('modalCompany').textContent    = currentTrade.company;
+  document.getElementById('modalPolitician').textContent = `Pilot: ${p.name} (${p.party})`;
+  document.getElementById('modalOrigAmount').textContent = `Disclosed amount: ${currentTrade.amount}`;
+  document.getElementById('modalTransDate').textContent  = `Transaction date: ${formatDate(currentTrade.transDate)}`;
+  document.getElementById('modalFiledDate').textContent  = `Filed with House: ${formatDate(currentTrade.filedDate)}`;
+
+  const notice = document.getElementById('modalLagNotice');
+  const lc = lagClass(lagDays);
+  const color = lc === 'lag-ok' ? 'var(--sage-bright)' : lc === 'lag-mid' ? 'var(--gold)' : 'var(--rose-bright)';
+  const bg    = lc === 'lag-ok' ? 'var(--sage-dim)'   : lc === 'lag-mid' ? 'var(--gold-dim)'   : 'var(--rose-dim)';
+  const msg   = lc === 'lag-ok'
+    ? `Filed quickly (${lagDays} days). Signal still fresh.`
+    : lc === 'lag-mid'
+    ? `${lagDays}-day lag between trade and disclosure. Stock may have moved. Check current price before copying.`
+    : `${lagDays}-day lag. This is a stale signal. The position is now ${staleDays} days old. Only copy if you independently believe in the thesis.`;
+  notice.style.cssText = `background:${bg};color:${color};border:1px solid ${color}22;`;
+  notice.textContent = msg;
+
+  const badge = document.getElementById('modalBadge');
+  const styles = {
+    buy:  'background:var(--sage-dim);color:var(--sage-bright)',
+    sell: 'background:var(--rose-dim);color:var(--rose-bright)',
+    call: 'background:var(--gold-dim);color:var(--gold)'
+  };
+  badge.style.cssText = `${styles[currentTrade.type]};font-family:var(--font-mono);font-size:9.5px;padding:4px 11px;border-radius:100px;letter-spacing:0.12em;text-transform:uppercase;`;
+  badge.textContent = currentTrade.type;
+
+  selectedAmount = 250;
+  document.getElementById('customAmount').value = '';
+  document.querySelectorAll('.amount-chip').forEach((c,i) => c.classList.toggle('selected', i===0));
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentTrade = null;
+}
+
+function selectAmount(btn, amt) {
+  selectedAmount = amt;
+  document.getElementById('customAmount').value = '';
+  document.querySelectorAll('.amount-chip').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function clearChips() {
+  document.querySelectorAll('.amount-chip').forEach(c => c.classList.remove('selected'));
+  selectedAmount = parseFloat(document.getElementById('customAmount').value) || 0;
+}
+
+function executeTrade() {
+  if (!currentTrade) return;
+  const custom = document.getElementById('customAmount').value;
+  const amount = custom ? parseFloat(custom) : selectedAmount;
+  executedTrades.push(currentTrade.id);
+  closeModal();
+
+  const ov = document.getElementById('successOverlay');
+  ov.classList.add('show');
+  setTimeout(() => ov.classList.remove('show'), 1800);
+
+  tradeCount++;
+  simReturn += (Math.random() * 3.2 - 0.2);
+  document.getElementById('tradeCount').textContent = tradeCount;
+  const sign = simReturn >= 0 ? '+' : '';
+  const el = document.getElementById('simReturn');
+  el.textContent = sign + simReturn.toFixed(1) + '%';
+  el.className = 'stat-value ' + (simReturn >= 0 ? 'pos' : 'neg');
+
+  addExecLog(currentTrade, amount);
+  updateMiniChart();
+  showToast('Order placed', `${currentTrade.ticker} ${currentTrade.type} — $${amount.toLocaleString()} via Schwab`);
+  renderTrades();
+}
+
+function addExecLog(trade, amount) {
+  const log = document.getElementById('execLog');
+  const p = pilots[trade.pilot];
+  const time = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+  const color = {buy:'var(--sage)',sell:'var(--rose)',call:'var(--gold)'}[trade.type];
+  const empty = log.querySelector('.empty-state');
+  if (empty) empty.remove();
+  const entry = document.createElement('div');
+  entry.className = 'exec-entry';
+  entry.innerHTML = `<div class="exec-dot" style="background:${color}"></div><div class="exec-text"><strong>${trade.ticker}</strong> ${trade.type} via ${p.initials} — $${amount.toLocaleString()}</div><div class="exec-time">${time}</div>`;
+  log.insertBefore(entry, log.querySelector('.exec-entry') || null);
+}
+
+function updateMiniChart() {
+  const chart = document.getElementById('miniChart');
+  chart.innerHTML = Array.from({length:14}, (_,i) => {
+    const h = Math.random(), last = i===13;
+    const color = last ? 'var(--gold)' : (h>0.5 ? 'var(--sage)' : 'var(--border-mid)');
+    return `<div class="mini-bar" style="height:${Math.max(3,h*30)}px;background:${color};opacity:${0.45+i*0.04}"></div>`;
+  }).join('');
+}
+
+function showToast(title, body) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastBody').textContent  = body;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+function toggleAutoExec() {
+  const on = document.getElementById('autoExec').checked;
+  showToast(on ? 'Auto-execute on' : 'Auto-execute off',
+    on ? 'Trades will execute automatically on detection.' : 'You will approve each trade manually.');
+}
+
+function updateClock() {
+  const est = new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'}));
+  document.getElementById('clock').textContent =
+    `${String(est.getHours()).padStart(2,'0')}:${String(est.getMinutes()).padStart(2,'0')}:${String(est.getSeconds()).padStart(2,'0')} EST`;
+}
+
+let syncSec = 900;
+function updateSync() {
+  if (--syncSec <= 0) syncSec = 900;
+  document.getElementById('nextSync').textContent =
+    `${String(Math.floor(syncSec/60)).padStart(2,'0')}:${String(syncSec%60).padStart(2,'0')}`;
+}
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// Boot
+updateMiniChart();
+updateClock();
+loadTrades(); // fetches trades.json, falls back to sample data
+setInterval(updateClock, 1000);
+setInterval(updateSync, 1000);
+// Re-poll for fresh data every 15 minutes without a page reload
+setInterval(loadTrades, 15 * 60 * 1000);
+</script>
+</body>
+</html>
