@@ -1002,12 +1002,15 @@ async function loadTrades() {
     if (!res.ok) throw new Error('not found');
     const data = await res.json();
 
-    if (Array.isArray(data.trades) && data.trades.length > 0) {
-      trades = data.trades;
-      const lastUpdated = data.lastUpdated ? new Date(data.lastUpdated) : null;
-      if (lastUpdated) {
-        showToast('Live data loaded', `Last synced ${lastUpdated.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`);
-      }
+    if (data.lastUpdated !== null && data.lastUpdated !== undefined) {
+      trades = Array.isArray(data.trades) ? data.trades : [];
+          const lastUpdated = new Date(data.lastUpdated);
+          const syncTime = lastUpdated.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+          if (trades.length > 0) {
+            showToast('Live data loaded', `Last synced ${syncTime}`);
+          } else {
+            showToast('Poller active', `Synced ${syncTime} — no new filings yet`);
+          }
     } else {
       throw new Error('empty');
     }
