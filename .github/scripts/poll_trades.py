@@ -12,7 +12,7 @@ import json
 import requests
 from datetime import datetime, timezone, timedelta
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
+# ââ CONFIG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 HOUSE_API  = "https://housestockwatcher.com/api"
 SENATE_API = "https://senatestockwatcher.com/api"
@@ -44,7 +44,7 @@ INFRA_TICKERS = {
     "NNE","SMR","CCJ","NRG","VST","AES","HUBB","GNRC","SMCI","HPE",
 }
 
-# ── HELPERS ───────────────────────────────────────────────────────────────────
+# ââ HELPERS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 def get_values_tag(ticker: str) -> str | None:
     ticker = ticker.upper()
@@ -61,7 +61,7 @@ def parse_amount(raw: str) -> str:
     if not raw:
         return "Unknown"
     raw = raw.strip()
-    # Already looks like $X–$Y
+    # Already looks like $Xâ$Y
     if "$" in raw:
         return raw
     # Sometimes comes as numeric ranges like "1001-15000"
@@ -72,7 +72,7 @@ def parse_amount(raw: str) -> str:
             if n >= 1_000_000: return f"${n//1_000_000}M"
             if n >= 1_000:     return f"${n//1_000}K"
             return f"${n}"
-        return f"{fmt(lo)}–{fmt(hi)}"
+        return f"{fmt(lo)}â{fmt(hi)}"
     except Exception:
         return raw
 
@@ -97,7 +97,7 @@ def fetch_senate() -> list[dict]:
 
 def normalise_house(raw: dict, idx: int) -> dict | None:
     name = f"{raw.get('representative','').strip()}"
-    pilot_key = PILOTS.get(name)
+    pilot_key = find_pilot_key(name)
     if not pilot_key:
         return None
     ticker   = (raw.get("ticker") or "").upper().strip()
@@ -125,7 +125,7 @@ def normalise_house(raw: dict, idx: int) -> dict | None:
 
 def normalise_senate(raw: dict, idx: int) -> dict | None:
     name = f"{raw.get('first_name','')} {raw.get('last_name','')}".strip()
-    pilot_key = PILOTS.get(name)
+    pilot_key = find_pilot_key(name)
     if not pilot_key:
         return None
     ticker = (raw.get("ticker") or "").upper().strip()
@@ -159,16 +159,20 @@ def _is_new(disclosure_date: str) -> bool:
     except Exception:
         return False
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
+# ââ MAIN ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 def main():
     print("Fetching house disclosures...")
     house_raw  = fetch_house()
     print(f"  {len(house_raw)} raw records")
+    house_names = sorted(set(r.get('representative','') for r in house_raw if r.get('representative','').strip()))
+    print(f"  House names seen: {house_names}")
 
     print("Fetching senate disclosures...")
     senate_raw = fetch_senate()
     print(f"  {len(senate_raw)} raw records")
+    senate_names = sorted(set(f"{r.get('first_name','')} {r.get('last_name','')}" .strip() for r in senate_raw if r.get('last_name','')))
+    print(f"  Senate names seen: {senate_names}")
 
     trades = []
 
