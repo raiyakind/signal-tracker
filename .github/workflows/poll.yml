@@ -22,9 +22,14 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests anthropic
 
       - name: Poll and filter trades
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
         run: python .github/scripts/poll_trades.py
 
       - name: Commit updated trades.json if changed
