@@ -57,7 +57,7 @@ PILOT_INFO = {
 }
 
 # ── Values / infra tagging ───────────────────────────────────────────────────
-ALUES_TAGS = {
+VALUES_TAGS = {
     "Healthcare equity":   ["UNH","CVS","ABBV","HCA","ABC","MCK","AET","CI","HUM","MOH","CNC"],
     "Clean energy":        ["NEE","DTE","AEP","SO","ED","PCG","XEL","WEC","ETR","CNP"],
     "Clean nuclear":       ["CEG","CCJ","NNE","SMR","BWXT","BWX"],
