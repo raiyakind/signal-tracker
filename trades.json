@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-04-20T22:31:54.510346+00:00",
+  "lastUpdated": "2026-04-21T16:40:03.737930+00:00",
   "source": "capitoltrades.com",
   "pilots": [
-    "khanna",
+    "sewell",
     "mcclain",
-    "sewell"
+    "khanna"
   ],
   "trades": [
     {
@@ -1217,6 +1217,36 @@
       "transDate": "2026-03-30",
       "filedDate": "2026-04-09",
       "isNew": false,
+      "values": null,
+      "infra": false,
+      "chamber": "house",
+      "analysis": ""
+    },
+    {
+      "id": "ct20003797391",
+      "pilot": "sewell",
+      "ticker": "GEHC",
+      "company": "GE HEALTHCARE TECHNOLOGI INC",
+      "type": "sell",
+      "amount": "$1K-$15K",
+      "transDate": "2026-03-25",
+      "filedDate": "2026-04-21",
+      "isNew": true,
+      "values": null,
+      "infra": false,
+      "chamber": "house",
+      "analysis": ""
+    },
+    {
+      "id": "ct20003797392",
+      "pilot": "sewell",
+      "ticker": "TPR",
+      "company": "Tapestry Inc",
+      "type": "sell",
+      "amount": "$15K-$50K",
+      "transDate": "2026-03-25",
+      "filedDate": "2026-04-21",
+      "isNew": true,
       "values": null,
       "infra": false,
       "chamber": "house",
