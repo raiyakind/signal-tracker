@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-04-28T22:31:57.390008+00:00",
+  "lastUpdated": "2026-04-29T15:09:49.890908+00:00",
   "source": "capitoltrades.com",
   "pilots": [
     "mcclain",
-    "sewell",
-    "khanna"
+    "khanna",
+    "sewell"
   ],
   "trades": [
     {
@@ -1231,7 +1231,7 @@
       "amount": "$1K-$15K",
       "transDate": "2026-03-25",
       "filedDate": "2026-04-21",
-      "isNew": true,
+      "isNew": false,
       "values": null,
       "infra": false,
       "chamber": "house",
@@ -1246,7 +1246,7 @@
       "amount": "$15K-$50K",
       "transDate": "2026-03-25",
       "filedDate": "2026-04-21",
-      "isNew": true,
+      "isNew": false,
       "values": null,
       "infra": false,
       "chamber": "house",
