@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-06-04T18:34:56.654391+00:00",
+  "lastUpdated": "2026-06-04T20:53:39.889229+00:00",
   "source": "capitoltrades.com",
   "pilots": [
-    "sewell",
     "mcclain",
-    "khanna"
+    "khanna",
+    "sewell"
   ],
   "trades": [
     {
